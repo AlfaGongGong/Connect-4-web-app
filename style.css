@@ -1,8 +1,20 @@
+* {
+      box-sizing: border-box;
+
+}
+
+html {
+      height: 100%;
+      width: 100%;
+}
+
 body {
       background: #fff;
       border: 0;
       margin: 0;
       padding: 0;
+      width: 100%;
+      height: 100%;
       font: 12px "Segoe UI", "Segoe UI Web Regular", "Segoe UI Symbol",
             "Helvetica Neue", "BBAlpha Sans", "S60 Sans", Arial, sans-serif;
       color: #111;
@@ -25,19 +37,54 @@ h3 {
       margin-top: 5px;
 }
 
-.container {
-      margin-top: 5rem;
+.gameFrame {
+      min-width: 470px;
+      min-height: 350px;
+      max-width: 860px;
+      max-height: 390px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      margin: 0px;
+      padding: 0px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+
 }
 
-.board {
-      margin: 20px 0;
-      margin-left: auto;
-      margin-right: auto;
+table.board {
       background-color: deepskyblue;
       opacity: 1;
       border: 2px solid #ddd;
       transition: opacity 500ms linear;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+      width: auto;
+      width: max-content;
+      width: -moz-max-content;
+      width: -webkit-max-content;
+      width: -o-max-content;
+      width: -ms-max-content;
+      height: auto;
+      height: max-content;
+      height: -moz-max-content;
+      height: -webkit-max-content;
+      height: -o-max-content;
+      height: -ms-max-content;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+
+}
+
+tbody {
+      display: table-row-group;
+      width: 100%;
+      height: 100%;
+
 }
 
 .game-over-buttons {
@@ -52,6 +99,8 @@ h3 {
 td {
       top: 0;
       transition: top 2s;
+      position: relative;
+
 }
 
 .board button {
@@ -144,4 +193,10 @@ label {
       /*color: white;*/
       position: relative;
       margin: 0 0 10px 0;
+}
+
+tr {
+      cursor: pointer;
+      width: 100%;
+
 }
