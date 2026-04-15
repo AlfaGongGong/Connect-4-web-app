@@ -1,202 +1,539 @@
-* {
+/* ===========================
+   RESET & BASE
+=========================== */
+*, *::before, *::after {
       box-sizing: border-box;
-
-}
-
-html {
-      height: 100%;
-      width: 100%;
-}
-
-body {
-      background: #fff;
-      border: 0;
       margin: 0;
       padding: 0;
+}
+
+html, body {
       width: 100%;
       height: 100%;
-      font: 12px "Segoe UI", "Segoe UI Web Regular", "Segoe UI Symbol",
-            "Helvetica Neue", "BBAlpha Sans", "S60 Sans", Arial, sans-serif;
-      color: #111;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+      color: #fff;
+      user-select: none;
+      -webkit-user-select: none;
 }
 
-h2 {
-      position: absolute;
-      font-size: 30px;
-      font-family: "Oxygen", "Lucida Console", "Courier New", sans-serif, monospace;
-      margin-left: auto;
-      margin-right: auto;
-      display: contents;
-}
-
-h3 {
-      font-family: "Quicksand", "Lucida Console", "Courier New", sans-serif,
-            monospace;
-      font-size: 20px;
-      margin-bottom: 5px;
-      margin-top: 5px;
-}
-
-.gameFrame {
-      min-width: 470px;
-      min-height: 350px;
-      max-width: 860px;
-      max-height: 390px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
+/* ===========================
+   STARFIELD CANVAS
+=========================== */
+#starfield {
+      position: fixed;
+      inset: 0;
       width: 100%;
       height: 100%;
-      background: #fff;
-      margin: 0px;
-      padding: 0px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-
-}
-
-table.board {
-      background-color: deepskyblue;
-      opacity: 1;
-      border: 2px solid #ddd;
-      transition: opacity 500ms linear;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-      width: auto;
-      width: max-content;
-      width: -moz-max-content;
-      width: -webkit-max-content;
-      width: -o-max-content;
-      width: -ms-max-content;
-      height: auto;
-      height: max-content;
-      height: -moz-max-content;
-      height: -webkit-max-content;
-      height: -o-max-content;
-      height: -ms-max-content;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-
-}
-
-tbody {
-      display: table-row-group;
-      width: 100%;
-      height: 100%;
-
-}
-
-.game-over-buttons {
+      z-index: 0;
       pointer-events: none;
 }
 
-.game-over-board {
-      opacity: 0.3;
-      transition: opacity 1s linear;
-}
-
-td {
-      top: 0;
-      transition: top 2s;
+/* ===========================
+   SCENE LAYOUT
+=========================== */
+.scene {
       position: relative;
-
-}
-
-.board button {
-      width: 60px;
-      height: 60px;
-      background-color: rgb(242, 242, 242);
-      border-radius: 50px;
-      border: 4px solid black;
-      margin: 1px;
-      top: 0;
-      outline: none;
-}
-
-.clickedRowButton {
-      position: absolute;
-}
-
-.clicked {
-      top: 400px;
-}
-
-#reloadGame {
-      font-family: "Questrial", "Lucida Console", "Courier New", sans-serif,
-            monospace;
-      width: 200px;
-      margin-right: auto;
-      margin-left: auto;
-      margin-top: 10px;
-      background: green;
-      color: #fff;
-      font-size: 1.6em;
-      padding: 10px 20px;
-      cursor: pointer;
-      transition: 600ms ease all;
-      outline: none;
-}
-
-#reloadGame:hover {
-      background: #fff;
-      color: #20d0f6;
-}
-
-#reloadGame:before,
-#reloadGame:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: 2px;
-      width: 0;
-      background: #20d0f6;
-      transition: 400ms ease all;
-}
-
-#reloadGame:after {
-      right: inherit;
-      top: inherit;
-      left: 0;
-      bottom: 0;
-}
-
-#reloadGame:hover:before,
-#reloadGame:hover:after {
+      z-index: 1;
       width: 100%;
-      transition: 600ms ease all;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 8px;
 }
 
-#reloadGame:focus {
+/* ===========================
+   HUD / HEADER
+=========================== */
+.hud {
+      text-align: center;
+      width: 100%;
+      max-width: 720px;
+}
+
+.game-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #fff;
+      text-shadow:
+            0 0 10px rgba(0, 210, 255, 0.9),
+            0 0 30px rgba(0, 150, 255, 0.6),
+            0 0 70px rgba(0, 100, 255, 0.3);
+      margin-bottom: 12px;
+}
+
+.game-title .accent {
+      color: #ffdd00;
+      text-shadow:
+            0 0 12px rgba(255, 220, 0, 1),
+            0 0 30px rgba(255, 150, 0, 0.7),
+            0 0 60px rgba(255, 80, 0, 0.4);
+}
+
+/* Status bar */
+.status-bar {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 8px;
+}
+
+.player-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 8px 14px;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+      min-width: 155px;
+}
+
+.player-card.active {
+      border-color: rgba(0, 210, 255, 0.55);
+      background: rgba(0, 210, 255, 0.09);
+      box-shadow: 0 0 14px rgba(0, 210, 255, 0.25);
+}
+
+.player-card.active-p2 {
+      border-color: rgba(237, 45, 73, 0.55);
+      background: rgba(237, 45, 73, 0.09);
+      box-shadow: 0 0 14px rgba(237, 45, 73, 0.25);
+}
+
+.chip-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      flex-shrink: 0;
+}
+
+.p1-dot {
+      background: radial-gradient(circle at 35% 30%, #888, #1c1c1c 60%, #000);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.2);
+}
+
+.p2-dot {
+      background: radial-gradient(circle at 35% 30%, #ff9fa8, #ed2d49 55%, #7a0020);
+      box-shadow: 0 3px 8px rgba(200, 0, 30, 0.5), 0 0 10px rgba(237, 45, 73, 0.35),
+            inset 0 1px 3px rgba(255, 200, 200, 0.35);
+}
+
+.player-details {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+}
+
+.player-details.right {
+      text-align: right;
+}
+
+.player-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.35);
+}
+
+.player-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #dde8ff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 90px;
+}
+
+.score {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffdd00;
+      text-shadow: 0 0 12px rgba(255, 200, 0, 0.6);
+      min-width: 26px;
+      text-align: center;
+      line-height: 1;
+}
+
+.vs-sep {
+      display: flex;
+      align-items: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.2);
+      font-weight: 700;
+}
+
+.turn-display {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(0.52rem, 1.4vw, 0.72rem);
+      letter-spacing: 3px;
+      color: #00d4ff;
+      text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+      min-height: 18px;
+      text-transform: uppercase;
+      transition: color 0.35s, text-shadow 0.35s;
+}
+
+/* ===========================
+   3D BOARD SCENE
+=========================== */
+.board-scene {
+      perspective: 1100px;
+      perspective-origin: 50% 45%;
+}
+
+.board-wrapper {
+      transform-style: preserve-3d;
+      transform: rotateX(8deg) rotateY(0deg);
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: grab;
+      position: relative;
+}
+
+.board-wrapper.dragging {
+      cursor: grabbing;
+      transition: none;
+}
+
+/* ===========================
+   BOARD TABLE
+=========================== */
+.board {
+      border-collapse: separate;
+      border-spacing: 0;
+      background: linear-gradient(160deg, #1d7bbf 0%, #0f5e9c 45%, #093f72 100%);
+      border-radius: 14px;
+      padding: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      position: relative;
+      /* Layered shadows: right-bottom offsets = extruded 3D edge + ambient glow */
+      box-shadow:
+            4px  4px 0 rgba(5,  30, 60, 0.95),
+            8px  8px 0 rgba(4,  24, 50, 0.95),
+            12px 12px 0 rgba(3, 18, 40, 0.95),
+            16px 16px 0 rgba(2, 14, 32, 0.95),
+            20px 20px 0 rgba(1, 10, 24, 0.95),
+            0 0 40px rgba(0, 120, 220, 0.3),
+            20px 28px 50px rgba(0, 0, 0, 0.75);
+}
+
+/* Top-face highlight strip */
+.board::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 42%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.09), transparent);
+      border-radius: 12px 12px 0 0;
+      pointer-events: none;
+}
+
+/* ===========================
+   TABLE CELLS
+=========================== */
+.board td {
+      padding: 5px;
+}
+
+/* ===========================
+   BUTTONS / CHIPS
+=========================== */
+.board button {
+      display: block;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      border: 2px solid rgba(0, 20, 60, 0.55);
       outline: none;
-      border-color: #ddd;
-      box-shadow: inset 0px 0px 5px 2px #efefef;
-}
-
-label {
       cursor: pointer;
-      cursor: hand;
+      transition: transform 0.14s, box-shadow 0.14s;
+      /* Empty cell — translucent concave hole */
+      background: radial-gradient(circle at 40% 35%,
+            rgba(255, 255, 255, 0.13) 0%,
+            rgba(80,  140, 220, 0.09) 40%,
+            rgba(0,   20,  60,  0.58) 100%);
+      box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.5),
+            inset 0 2px 5px rgba(255, 255, 255, 0.08),
+            inset 0 -3px 7px rgba(0, 0, 0, 0.45);
 }
 
-.hidden {
+.board button:hover {
+      transform: scale(1.07);
+}
+
+/* Column hover highlight */
+.board button.col-hi {
+      background: radial-gradient(circle at 40% 35%,
+            rgba(255, 255, 255, 0.24) 0%,
+            rgba(100, 185, 255, 0.16) 45%,
+            rgba(0,   20,  60,  0.45) 100%);
+      box-shadow:
+            0 4px 8px rgba(0, 0, 0, 0.4),
+            0 0 12px rgba(0, 180, 255, 0.22),
+            inset 0 2px 5px rgba(255, 255, 255, 0.18);
+      border-color: rgba(0, 180, 255, 0.32);
+}
+
+/* Player 1 chip — dark steel */
+.board button.p1 {
+      background: radial-gradient(circle at 35% 28%,
+            #818181 0%,
+            #2e2e2e 45%,
+            #080808 100%);
+      border: 2px solid #0e0e0e;
+      box-shadow:
+            0 5px 14px rgba(0, 0, 0, 0.85),
+            0 0 8px rgba(200, 200, 200, 0.07),
+            inset 0 3px 6px rgba(255, 255, 255, 0.2),
+            inset 0 -3px 7px rgba(0, 0, 0, 0.65);
+      animation: dropBounce 0.42s cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+/* Player 2 chip — scarlet red */
+.board button.p2 {
+      background: radial-gradient(circle at 35% 28%,
+            #ffa0aa 0%,
+            #ed2d49 48%,
+            #680013 100%);
+      border: 2px solid #480010;
+      box-shadow:
+            0 5px 14px rgba(200, 0, 30, 0.55),
+            0 0 22px rgba(237, 45, 73, 0.4),
+            inset 0 3px 6px rgba(255, 185, 195, 0.38),
+            inset 0 -3px 7px rgba(100, 0, 20, 0.55);
+      animation: dropBounce 0.42s cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+/* Winning chip pulse — defined after .p1/.p2 so it wins the cascade */
+.board button.winner {
+      animation: winPulse 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes dropBounce {
+      0%   { transform: scale(0.35) translateY(-12px); opacity: 0.5; }
+      55%  { transform: scale(1.13) translateY(2px); }
+      78%  { transform: scale(0.96) translateY(-1px); }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes winPulse {
+      0%   { transform: scale(1);    filter: brightness(1); }
+      100% { transform: scale(1.15); filter: brightness(1.5) drop-shadow(0 0 14px gold); }
+}
+
+/* Game-over state */
+.board.game-over button {
+      pointer-events: none;
+      cursor: default;
+}
+
+.board.game-over button:not(.p1):not(.p2) {
+      opacity: 0.28;
+}
+
+/* ===========================
+   CONTROLS
+=========================== */
+.controls {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+}
+
+.ctrl-btn {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 210, 255, 0.38);
+      background: rgba(0, 210, 255, 0.07);
+      color: #00d4ff;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.25s;
+      text-transform: uppercase;
+      backdrop-filter: blur(4px);
+}
+
+.ctrl-btn:hover {
+      background: rgba(0, 210, 255, 0.18);
+      border-color: #00d4ff;
+      box-shadow: 0 0 16px rgba(0, 210, 255, 0.35);
+      transform: translateY(-2px);
+}
+
+.ctrl-btn:active {
+      transform: translateY(0);
+}
+
+.new-game-btn {
+      border-color: rgba(255, 210, 0, 0.38);
+      background: rgba(255, 210, 0, 0.07);
+      color: #ffd200;
+}
+
+.new-game-btn:hover {
+      background: rgba(255, 210, 0, 0.18);
+      border-color: #ffd200;
+      box-shadow: 0 0 16px rgba(255, 210, 0, 0.35);
+}
+
+/* ===========================
+   HINT TEXT
+=========================== */
+.hint-text {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.18);
+      letter-spacing: 1px;
+}
+
+/* ===========================
+   WIN / TIE OVERLAYS
+=========================== */
+.win-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 12, 0.78);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      backdrop-filter: blur(6px);
+}
+
+.win-overlay.hidden {
       display: none;
 }
 
-.oddRow {
-      background-color: #ababab;
+.win-panel {
+      background: linear-gradient(148deg, rgba(8, 16, 36, 0.97), rgba(4, 8, 20, 0.98));
+      border: 1px solid rgba(255, 210, 0, 0.42);
+      border-radius: 22px;
+      padding: 44px 60px;
+      text-align: center;
+      box-shadow:
+            0 0 60px rgba(255, 200, 0, 0.22),
+            0 0 130px rgba(255, 100, 0, 0.1),
+            0 32px 80px rgba(0, 0, 0, 0.85);
+      animation: panelIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-.move-chip {
+.tie-panel {
+      border-color: rgba(96, 210, 255, 0.42);
+      box-shadow:
+            0 0 60px rgba(96, 210, 255, 0.16),
+            0 32px 80px rgba(0, 0, 0, 0.85);
+}
+
+@keyframes panelIn {
+      0%   { transform: scale(0.3) rotateY(-30deg); opacity: 0; }
+      100% { transform: scale(1)   rotateY(0deg);   opacity: 1; }
+}
+
+.trophy-icon {
+      font-size: 3.5rem;
+      line-height: 1;
+      margin-bottom: 8px;
       display: inline-block;
-      padding: 20px;
-      /*color: white;*/
-      position: relative;
-      margin: 0 0 10px 0;
+      animation: trophyRock 2s ease-in-out infinite;
 }
 
-tr {
-      cursor: pointer;
-      width: 100%;
+@keyframes trophyRock {
+      0%, 100% { transform: rotate(-6deg) scale(1); }
+      50%       { transform: rotate(6deg)  scale(1.08); }
+}
 
+.win-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #ffdd00;
+      text-shadow: 0 0 20px rgba(255, 200, 0, 0.85), 0 0 45px rgba(255, 100, 0, 0.55);
+      margin-bottom: 8px;
+}
+
+.tie-title {
+      color: #60d4ff;
+      text-shadow: 0 0 20px rgba(96, 212, 255, 0.85), 0 0 45px rgba(0, 150, 255, 0.55);
+}
+
+.win-player-name {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.72);
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+}
+
+/* ===========================
+   PARTICLE FX
+=========================== */
+#pfx {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 150;
+      overflow: hidden;
+}
+
+.px {
+      position: absolute;
+      border-radius: 50%;
+      animation: pxFly var(--dur) ease-out forwards;
+}
+
+@keyframes pxFly {
+      0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+      75%  { opacity: 0.6; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-height: 680px) {
+      .game-title { font-size: 1.4rem; margin-bottom: 5px; }
+      .board button { width: 52px; height: 52px; }
+      .board td { padding: 3px; }
+      .board { padding: 6px; }
+}
+
+@media (max-width: 560px) {
+      .board button { width: 44px; height: 44px; }
+      .board td { padding: 3px; }
+      .board { padding: 6px; }
+      .player-card { min-width: 128px; padding: 6px 10px; }
+      .score { font-size: 1.2rem; }
+      .win-panel { padding: 30px 28px; }
+      .win-title { font-size: 1.8rem; }
+}
+
+/* ===========================
+   REDUCED MOTION
+=========================== */
+@media (prefers-reduced-motion: reduce) {
+      .board-wrapper { transition: none; }
+      .board button { animation: none !important; transition: none; }
+      .board button.winner { filter: brightness(1.4) drop-shadow(0 0 10px gold); }
+      .trophy-icon { animation: none; }
+      .win-panel { animation: none; }
+      .px { animation: none; opacity: 0; }
 }
