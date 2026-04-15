@@ -59,7 +59,7 @@ html, body {
       font-family: 'Orbitron', monospace;
       font-size: clamp(1.6rem, 4vw, 2.8rem);
       font-weight: 900;
-      letter-spacing: 10px;
+      letter-spacing: 6px;
       color: #fff;
       text-shadow:
             0 0 10px rgba(0, 210, 255, 0.9),
@@ -141,7 +141,7 @@ html, body {
 
 .player-label {
       font-family: 'Orbitron', monospace;
-      font-size: 0.52rem;
+      font-size: 0.68rem;
       letter-spacing: 2px;
       color: rgba(255, 255, 255, 0.35);
 }
@@ -400,7 +400,7 @@ html, body {
    HINT TEXT
 =========================== */
 .hint-text {
-      font-size: 0.62rem;
+      font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.18);
       letter-spacing: 1px;
 }
@@ -524,4 +524,16 @@ html, body {
       .score { font-size: 1.2rem; }
       .win-panel { padding: 30px 28px; }
       .win-title { font-size: 1.8rem; }
+}
+
+/* ===========================
+   REDUCED MOTION
+=========================== */
+@media (prefers-reduced-motion: reduce) {
+      .board-wrapper { transition: none; }
+      .board button { animation: none !important; transition: none; }
+      .board button.winner { filter: brightness(1.4) drop-shadow(0 0 10px gold); }
+      .trophy-icon { animation: none; }
+      .win-panel { animation: none; }
+      .px { animation: none; opacity: 0; }
 }
